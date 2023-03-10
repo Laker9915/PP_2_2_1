@@ -14,32 +14,31 @@ import java.util.List;
 @Repository
 public class UserDaoImp implements UserDao {
 
-   @Autowired
-   private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
-   @Override
-   public void add(User user) {
-      sessionFactory.getCurrentSession().save(user);
-   }
+    public UserDaoImp(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
-   @Override
-   @SuppressWarnings("unchecked")
-   public List<User> listUsers() {
-      TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
-      return query.getResultList();
-   }
+    @Override
+    public void add(User user) {
+        sessionFactory.getCurrentSession().save(user);
+    }
 
-   @Override
-   public User getUserByCar(String model, int series) {
-      Session session = sessionFactory.getCurrentSession();
-      String hqlCar = "from Car where model = :model and series = :series";
-      Query query = session.createQuery(hqlCar);
-      query.setParameter("model", model);
-      query.setParameter("series", series);
-      Car car = (Car) query.getSingleResult();
-      String hqlUser = "from User where car = :car";
-      Query query1 = session.createQuery(hqlUser);
-      query1.setParameter("car", car);
-      return (User) query1.getSingleResult();
-   }
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getListUsers() {
+        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+        return query.getResultList();
+    }
+
+    @Override
+    public User getUserByCar(String model, int series) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "from User user where user.car.model = :model and user.car.series = :series";
+        Query query = session.createQuery(hql);
+        query.setParameter("model", model);
+        query.setParameter("series", series);
+        return (User) query.getSingleResult();
+    }
 }
