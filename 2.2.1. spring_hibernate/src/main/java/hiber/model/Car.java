@@ -8,8 +8,8 @@ import java.util.Objects;
 public class Car {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private long id;
 
     @Column(name = "model")
@@ -17,10 +17,6 @@ public class Car {
 
     @Column(name = "series")
     private int series;
-
-//    @OneToOne
-//    @MapsId
-//    private User user;
 
     public Car() {
     }
